@@ -6,6 +6,8 @@ import { JwtStrategy } from './jwt/jwt.service';
 import { UserModule } from './user/user.module';
 import { User } from './user/entity/user.entity';
 import { EmailService } from './email/email.service';
+import { CategoriesModule } from './categories/categories.module';
+import { Category } from './categories/entity/categoty.entity';
 
 @Module({
   imports: [
@@ -22,12 +24,14 @@ import { EmailService } from './email/email.service';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User],
+        entities: [User, Category],
         synchronize: true,
+        // logging: true,
       }),
     }),
     AuthModule,
     UserModule,
+    CategoriesModule,
   ],
   providers: [JwtStrategy, EmailService],
 })

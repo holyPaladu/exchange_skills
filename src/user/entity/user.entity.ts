@@ -7,6 +7,11 @@ import {
   DeleteDateColumn,
 } from 'typeorm';
 
+export enum UserRole {
+  USER = 'user',
+  ADMIN = 'admin',
+}
+
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn()
@@ -26,6 +31,16 @@ export class User {
 
   @Column({ default: false })
   isEmailVerified: boolean;
+
+  @Column({ nullable: true })
+  avatar: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.USER,
+  })
+  role: UserRole;
 
   @CreateDateColumn()
   createdAt: Date;

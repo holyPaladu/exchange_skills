@@ -20,7 +20,7 @@ import {
 } from '@nestjs/swagger';
 import { NoFilesInterceptor } from '@nestjs/platform-express';
 import { createCategoryDto } from './dto/categoty.dto';
-import { Category } from './entity/categoty.entity';
+import { Category } from './entity/category.entity';
 
 @Controller('categories')
 export class CategoriesController {

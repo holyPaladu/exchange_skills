@@ -7,7 +7,9 @@ import { UserModule } from './user/user.module';
 import { User } from './user/entity/user.entity';
 import { EmailService } from './email/email.service';
 import { CategoriesModule } from './categories/categories.module';
-import { Category } from './categories/entity/categoty.entity';
+import { Category } from './categories/entity/category.entity';
+import { SkillsModule } from './skills/skills.module';
+import { Skill, UserSkills } from './skills/entity/skill.entity';
 
 @Module({
   imports: [
@@ -24,7 +26,7 @@ import { Category } from './categories/entity/categoty.entity';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
-        entities: [User, Category],
+        entities: [User, Category, Skill, UserSkills],
         synchronize: true,
         // logging: true,
       }),
@@ -32,6 +34,7 @@ import { Category } from './categories/entity/categoty.entity';
     AuthModule,
     UserModule,
     CategoriesModule,
+    SkillsModule,
   ],
   providers: [JwtStrategy, EmailService],
 })

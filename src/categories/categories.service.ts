@@ -3,12 +3,12 @@ import {
   HttpCode,
   HttpStatus,
   Injectable,
+  NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Category } from './entity/categoty.entity';
+import { Category } from './entity/category.entity';
 import { createCategoryDto } from './dto/categoty.dto';
-import { log } from 'console';
 
 @Injectable()
 export class CategoriesService {
@@ -19,7 +19,11 @@ export class CategoriesService {
 
   @HttpCode(HttpStatus.OK)
   async findAll() {
-    return await this.categoryRepository.find();
+    const category = await this.categoryRepository.find();
+    if (!category) throw new NotFoundException('Categories null');
+    return {
+      categories: category,
+    };
   }
 
   @HttpCode(HttpStatus.CREATED)

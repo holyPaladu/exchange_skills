@@ -1,4 +1,3 @@
-import { UserSkills } from 'src/skills/entity/skill.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -6,7 +5,6 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
-  OneToMany,
 } from 'typeorm';
 
 export enum UserRole {
@@ -43,10 +41,6 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
-
-  // Add the relation to UserSkills
-  @OneToMany(() => UserSkills, (userSkills) => userSkills.user, { eager: true })
-  userSkills: UserSkills[];
 
   @CreateDateColumn()
   createdAt: Date;

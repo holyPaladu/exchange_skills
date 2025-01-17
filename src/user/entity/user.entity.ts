@@ -1,3 +1,4 @@
+import { Skill } from 'src/skill/entity/skill.entity';
 import {
   Entity,
   PrimaryGeneratedColumn,
@@ -5,6 +6,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   DeleteDateColumn,
+  ManyToMany,
+  JoinTable,
 } from 'typeorm';
 
 export enum UserRole {
@@ -41,6 +44,10 @@ export class User {
     default: UserRole.USER,
   })
   role: UserRole;
+
+  @ManyToMany(() => Skill, (skill) => skill.users)
+  @JoinTable()
+  skills: Skill[];
 
   @CreateDateColumn()
   createdAt: Date;

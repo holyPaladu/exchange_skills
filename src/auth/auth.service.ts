@@ -7,27 +7,32 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { User } from '../user/entity/user.entity';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { LoginDto, RegisterDto, CheckEmailDto } from './dto/auth.dto';
 import { EmailService } from '../email/email.service';
+import { Skill } from 'src/skill/entity/skill.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(User)
-    private userRepository: Repository<User>,
+    @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Skill) private skillRepository: Repository<Skill>,
     private jwtService: JwtService,
     private readonly emailService: EmailService,
   ) {}
 
   @HttpCode(HttpStatus.CREATED)
   async register(dto: RegisterDto) {
-    const { password, email, username } = dto;
-    const user = await this.userRepository.findOne({ where: { email } });
-    if (user) {
+    const { password, email, username, skills } = dto;
+    // Выполнение независимых операций параллельно
+    const [existingUser, skillEntities] = await Promise.all([
+      this.userRepository.findOne({ where: { email } }), // Проверка пользователя
+      this.skillRepository.findBy({ id: In(skills) }), // Получение навыков
+    ]);
+    if (existingUser) {
       throw new ConflictException('User with this email already exists');
     }
     // Генерация случайного кода для подтверждения
@@ -38,6 +43,7 @@ export class AuthService {
       email,
       ottp: verificationCode,
       password: hashedPassword,
+      skills: skillEntities,
     });
     await this.userRepository.save(newUser);
     await this.emailService.sendVerificationEmail(email, verificationCode);

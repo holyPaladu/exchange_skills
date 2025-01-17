@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsEmail } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsEmail,
+  IsArray,
+  IsNumber,
+} from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class RegisterDto {
@@ -16,6 +22,14 @@ export class RegisterDto {
   @IsString()
   @IsNotEmpty()
   password: string;
+
+  @ApiProperty({
+    description: 'List of skill IDs',
+    type: [Number],
+  })
+  @IsArray()
+  @IsNumber({}, { each: true })
+  skills: number[];
 }
 
 export class LoginDto {

@@ -7,6 +7,7 @@ import { User } from '../user/entity/user.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigService, ConfigModule } from '@nestjs/config';
 import { EmailService } from 'src/email/email.service';
+import { Skill } from 'src/skill/entity/skill.entity';
 
 @Module({
   imports: [
@@ -20,7 +21,7 @@ import { EmailService } from 'src/email/email.service';
         }, // Get expiration time from .env
       }),
     }),
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Skill]),
   ],
   controllers: [AuthController],
   providers: [AuthService, JwtStrategy, EmailService],

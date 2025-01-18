@@ -75,7 +75,7 @@ export class CategoryController {
     return this.categoryService.deleteCategoryById(id);
   }
 
-  @Post(':id')
+  @Post('restore/:id')
   @UseInterceptors(NoFilesInterceptor())
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Restore category by id' })

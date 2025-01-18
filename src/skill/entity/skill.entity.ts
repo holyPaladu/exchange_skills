@@ -29,9 +29,7 @@ export class Skill {
   @JoinTable()
   users: User;
 
-  @ManyToOne(() => Category, (category) => category.skills, {
-    onDelete: 'SET NULL',
-  })
+  @ManyToOne(() => Category, (category) => category.skills)
   category: Category;
 
   @CreateDateColumn()

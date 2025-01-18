@@ -5,7 +5,7 @@ export class createdSkill {
   @ApiProperty({ description: 'Skill title' })
   @IsString()
   @IsNotEmpty()
-  name: string;
+  title: string;
 
   @ApiProperty({
     description: 'List of category IDs',
@@ -14,5 +14,5 @@ export class createdSkill {
   @ApiProperty({ description: 'User skill' })
   @IsArray()
   @IsNumber({}, { each: true })
-  categories: number[];
+  category: number;
 }

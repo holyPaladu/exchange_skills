@@ -54,7 +54,10 @@ export class CategoryController {
   })
   @ApiBody({ type: createdCategory })
   @ApiResponse({ status: 200, description: 'Successful updated category' })
-  async updateTitle(@Param('id', ParseIntPipe) id: number, @Body() body: createdCategory) {
+  async updateTitle(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() body: createdCategory,
+  ) {
     return this.categoryService.updateCategory(id, body);
   }
 
@@ -65,10 +68,24 @@ export class CategoryController {
   @ApiParam({
     name: 'id',
     type: Number,
-    description: 'ID of the category to update',
+    description: 'ID of the category to delete',
   })
   @ApiResponse({ status: 200, description: 'Successful deleted category' })
   async deleteById(@Param('id', ParseIntPipe) id: number) {
     return this.categoryService.deleteCategoryById(id);
+  }
+
+  @Post(':id')
+  @UseInterceptors(NoFilesInterceptor())
+  @ApiConsumes('multipart/form-data')
+  @ApiOperation({ summary: 'Restore category by id' })
+  @ApiParam({
+    name: 'id',
+    type: Number,
+    description: 'ID of the category to restore',
+  })
+  @ApiResponse({ status: 200, description: 'Successful restore category' })
+  async restoreByTd(@Param('id', ParseIntPipe) id: number) {
+    return this.categoryService.restoreCategoryById(id);
   }
 }

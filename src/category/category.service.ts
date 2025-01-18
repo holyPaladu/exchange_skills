@@ -60,24 +60,55 @@ export class CategoryService {
   async deleteCategoryById(id: number) {
     const category = await this.categoryRepository.findOne({
       where: { id },
-      relations: ['skills'], // Загружаем связанные Skill
+      relations: ['skills'], // Загружаем связанные навыки
     });
 
-    // Мягко удаляем все связанные Skill
+    if (!category) throw new NotFoundException('Category not found');
+
+    // Устанавливаем поле category у всех связанных навыков в null
     if (category.skills.length > 0) {
       await Promise.all(
         category.skills.map((skill) =>
-          this.skillRepository.softDelete(skill.id),
+          this.skillRepository.update(skill.id, { category: null }),
         ),
       );
     }
 
-    if (!category) throw new NotFoundException('Category not found');
-
+    // Мягко удаляем категорию
     await this.categoryRepository.softDelete(id);
+
     return {
       status: HttpStatus.OK,
-      message: `${category.title} successfull deleted`,
+      message: `${category.title} successfully deleted`,
+    };
+  }
+
+  @HttpCode(HttpStatus.OK)
+  async restoreCategoryById(id: number) {
+    const category = await this.categoryRepository.findOne({
+      where: { id },
+      withDeleted: true, // Учитываем мягко удалённые категории
+    });
+
+    if (!category) throw new NotFoundException('Category not found');
+
+    // Восстанавливаем категорию
+    await this.categoryRepository.restore(id);
+
+    // Возвращаем категорию всем навыкам, у которых categoryId == null
+    const orphanSkills = await this.skillRepository.find({
+      where: { category: null },
+    });
+
+    await Promise.all(
+      orphanSkills.map((skill) =>
+        this.skillRepository.update(skill.id, { category }),
+      ),
+    );
+
+    return {
+      status: HttpStatus.OK,
+      message: `${category.title} successfully restored`,
     };
   }
 }

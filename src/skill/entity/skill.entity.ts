@@ -8,7 +8,6 @@ import {
   UpdateDateColumn,
   DeleteDateColumn,
   ManyToMany,
-  JoinTable,
   ManyToOne,
 } from 'typeorm';
 
@@ -26,8 +25,7 @@ export class Skill {
   title: string;
 
   @ManyToMany(() => User, (user) => user.skills, { cascade: true })
-  @JoinTable()
-  users: User;
+  users: User[];
 
   @ManyToOne(() => Category, (category) => category.skills)
   category: Category;

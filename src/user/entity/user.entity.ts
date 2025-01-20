@@ -46,7 +46,7 @@ export class User {
   role: UserRole;
 
   @ManyToMany(() => Skill, (skill) => skill.users)
-  @JoinTable()
+  @JoinTable({ name: 'user_skills' })
   skills: Skill[];
 
   @CreateDateColumn()

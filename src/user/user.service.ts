@@ -13,7 +13,7 @@ export class UserService {
   async findById({ id, username }: { id: number; username: string }) {
     return this.userRepository.findOne({
       where: { id },
-      relations: ['userSkills.skill'], // Если UserSkills связано с Skill
+      relations: ['skills'], // Если UserSkills связано с Skill
     });
   }
 }

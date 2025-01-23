@@ -10,9 +10,15 @@ import { SkillModule } from './skill/skill.module';
 import { Skill } from './skill/entity/skill.entity';
 import { CategoryModule } from './category/category.module';
 import { Category } from './category/entity/category.entity';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
+    ServeStaticModule.forRoot({
+      rootPath: join(process.cwd(), 'uploads'), // Указываем директорию для статического доступа
+      serveRoot: '/uploads', // Базовый путь для доступа
+    }),
     ConfigModule.forRoot({
       isGlobal: true, // Делает переменные окружения доступными по всему проекту
     }),

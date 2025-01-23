@@ -57,7 +57,7 @@ export class AuthService {
   async login({ password, email }: LoginDto) {
     const user = await this.userRepository.findOne({ where: { email } });
     if (!user) {
-      throw new NotFoundException('There is no such user');
+      throw new NotFoundException('User not found');
     }
     if (!user.isEmailVerified) {
       throw new UnauthorizedException('Email not verified');

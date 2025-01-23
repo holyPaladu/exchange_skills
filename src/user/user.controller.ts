@@ -14,6 +14,6 @@ export class UserController {
   @ApiOperation({ summary: 'Request user data' })
   getProfile(@Req() req: any) {
     // req.user будет содержать данные пользователя, извлеченные из токена
-    return this.userService.findById(req);
+    return this.userService.findById(req.user);
   }
 }

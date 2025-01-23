@@ -17,7 +17,7 @@ import {
 } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { FileInterceptor } from '@nestjs/platform-express';
-import * as process from 'node:process';
+import { FileUploadDto } from './dto/user.dto';
 
 @ApiTags('Users')
 @Controller('user')
@@ -36,17 +36,7 @@ export class UserController {
   @Put('upload')
   @UseInterceptors(FileInterceptor('file'))
   @ApiConsumes('multipart/form-data')
-  @ApiBody({
-    schema: {
-      type: 'object',
-      properties: {
-        file: {
-          type: 'string',
-          format: 'binary',
-        },
-      },
-    },
-  })
+  @ApiBody({ type: FileUploadDto })
   @ApiBearerAuth()
   @UseGuards(JwtAuthGuard)
   @ApiOperation({ summary: 'Upload user image' })
